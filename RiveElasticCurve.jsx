@@ -1,10 +1,10 @@
 // RiveElasticCurve.jsx
 // 主入口：组装 MVVM 架构并启动插件
-// 版本: 1.0.1 - 修复文件加载问题
+// 版本: 1.0.2 - 修复 IIFE 作用域导致的构造函数访问问题
 
 /**
  * Rive 弹性曲线插件
- * 版本: 1.0.1
+ * 版本: 1.0.2
  * 作者: Personal
  * 描述: 将 Rive 弹性曲线应用到 After Effects 关键帧
  */
@@ -78,6 +78,13 @@
             loadScript('view/ElasticCurveView.jsx');
             
             log('所有文件加载完成');
+            
+            // 在 IIFE 内部，$.evalFile() 加载的函数在全局作用域
+            // 需要显式引用它们
+            var ElasticCurveModel = $.global.ElasticCurveModel;
+            var ExpressionGenerator = $.global.ExpressionGenerator;
+            var ElasticCurveViewModel = $.global.ElasticCurveViewModel;
+            var ElasticCurveView = $.global.ElasticCurveView;
             
             // 验证构造函数是否存在
             if (typeof ElasticCurveModel !== 'function') {
