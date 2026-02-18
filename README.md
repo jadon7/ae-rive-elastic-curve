@@ -136,6 +136,15 @@ Rive Elastic Curve 是一个 After Effects 插件，可以将 Rive 动画系统�
 
 ## 常见问题
 
+### Q: 为什么运行脚本后看不到 UI 窗口？
+
+A: 这个问题在 v1.0.4 中已修复。如果你使用的是旧版本：
+1. 请更新到最新版本（v1.0.4 或更高）
+2. 确保使用的是 `RiveElasticCurve-standalone.jsx`
+3. 通过"文件 > 脚本 > 运行脚本文件"方式运行
+
+**技术说明**: v1.0.4 将窗口类型从 `palette` 改为 `dialog`，解决了在"运行脚本文件"模式下窗口不显示的问题。详见 `UI_FIX_DOCUMENTATION.md`。
+
 ### Q: 为什么点击"应用"后没有效果？
 
 A: 请检查：
@@ -182,6 +191,12 @@ A: 可以！同时选中多个属性，点击"应用"即可。
 ---
 
 ## 更新日志
+
+### v1.0.4 (2026-02-19)
+- 🐛 **修复**: UI 窗口不显示的问题
+- 将窗口类型从 `palette` 改为 `dialog`，确保在"运行脚本文件"模式下正常显示
+- 添加详细的 UI 修复文档 (`UI_FIX_DOCUMENTATION.md`)
+- 添加 UI 测试脚本 (`test-ui.jsx`)
 
 ### v1.0.3 (2026-02-16)
 - 🌟 新增单文件版本 `RiveElasticCurve-standalone.jsx`

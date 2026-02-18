@@ -1,10 +1,10 @@
 // RiveElasticCurve-standalone.jsx
 // 单文件版本：所有依赖已合并，无需外部文件
-// 版本: 1.0.3 - 单文件版本，解决 $.evalFile() 兼容性问题
+// 版本: 1.0.4 - 修复 UI 显示问题（dialog 窗口）
 
 /**
  * Rive 弹性曲线插件 - 单文件版本
- * 版本: 1.0.3
+ * 版本: 1.0.4
  * 作者: Personal
  * 描述: 将 Rive 弹性曲线应用到 After Effects 关键帧
  * 
@@ -584,8 +584,8 @@ function ElasticCurveView(viewModel) {
      * @returns {Window}
      */
     this.build = function() {
-        // 创建面板窗口
-        _window = new Window('palette', 'Rive Elastic Curve', undefined, {
+        // 创建对话框窗口（使用 dialog 而非 palette 以支持"运行脚本文件"方式）
+        _window = new Window('dialog', 'Rive Elastic Curve', undefined, {
             resizeable: false
         });
         
@@ -785,6 +785,8 @@ function ElasticCurveView(viewModel) {
     this.show = function() {
         if (_window) {
             _window.center();
+            // 对于 dialog 类型窗口，使用 show() 会阻塞执行直到窗口关闭
+            // 这是正确的行为，适合"运行脚本文件"方式
             _window.show();
         }
     };
