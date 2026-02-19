@@ -8,3 +8,17 @@
 
 # Logs
 *.log
+
+# Development directories
+dev-*/
+test-*/
+
+# Intermediate files
+*-fixed.jsx
+*-v2.jsx
+*-implementation.js
+*-generator.js
+test-*.js
+test-*.json
+*-report.md
+*-README.md
