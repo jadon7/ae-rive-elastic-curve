@@ -982,8 +982,9 @@
             factorGroup.visible = showFactor;
             tensionGroup.visible = showTension;
 
-            // 强制刷新面板布局
+            // 强制刷新布局 - 从面板到标签页
             paramPanel.layout.layout(true);
+            tab.layout.layout(true);
         };
 
         // 初始化参数显示状态
@@ -1068,10 +1069,11 @@
                                 type === 'springBouncy' || type === 'springCustom');
             paramPanel.visible = isSpringCurve;
 
-            // 强制刷新面板布局
+            // 强制刷新布局 - 从面板到标签页
             if (isSpringCurve) {
                 paramPanel.layout.layout(true);
             }
+            tab.layout.layout(true);
         };
 
         // 初始化参数显示状态
