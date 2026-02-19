@@ -810,7 +810,8 @@
         };
 
         this.generateExpression = function() {
-            return _expressionGen.generate(_model.getPlatform(), _model.getCurveType(), _model.getParams());
+            var expr = _expressionGen.generate(_model.getPlatform(), _model.getCurveType(), _model.getParams());
+            return expr || '';
         };
 
         this.getModel = function() {
@@ -975,10 +976,18 @@
         curveDropdown.onChange = function() {
             var type = curveMap[curveDropdown.selection.index];
             viewModel.setCurveType(type);
-            factorGroup.visible = (type === 'accelerate' || type === 'decelerate');
-            tensionGroup.visible = (type === 'anticipate' || type === 'overshoot' || type === 'anticipateOvershoot');
+
+            // 更新参数组可见性
+            var showFactor = (type === 'accelerate' || type === 'decelerate');
+            var showTension = (type === 'anticipate' || type === 'overshoot' || type === 'anticipateOvershoot');
+
+            factorGroup.visible = showFactor;
+            tensionGroup.visible = showTension;
+
+            // 强制刷新面板布局
+            paramPanel.layout.layout(true);
         };
-        
+
         // 初始化参数显示状态
         var initialType = curveMap[curveDropdown.selection.index];
         viewModel.setCurveType(initialType);
@@ -1055,13 +1064,24 @@
         curveDropdown.onChange = function() {
             var type = curveMap[curveDropdown.selection.index];
             viewModel.setCurveType(type);
-            paramPanel.visible = (type === 'springCustom');
+
+            // 显示所有 Spring 曲线的参数面板
+            var isSpringCurve = (type === 'springDefault' || type === 'springGentle' ||
+                                type === 'springBouncy' || type === 'springCustom');
+            paramPanel.visible = isSpringCurve;
+
+            // 强制刷新面板布局
+            if (isSpringCurve) {
+                paramPanel.layout.layout(true);
+            }
         };
-        
+
         // 初始化参数显示状态
         var initialType = curveMap[curveDropdown.selection.index];
         viewModel.setCurveType(initialType);
-        paramPanel.visible = (initialType === 'springCustom');
+        var isInitialSpring = (initialType === 'springDefault' || initialType === 'springGentle' ||
+                              initialType === 'springBouncy' || initialType === 'springCustom');
+        paramPanel.visible = isInitialSpring;
 
         dampSlider.onChanging = function() {
             dampText.text = dampSlider.value.toFixed(2);
