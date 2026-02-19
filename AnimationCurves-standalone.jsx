@@ -1072,7 +1072,8 @@
      */
     function createPreviewImage(viewModel) {
         var w = 280, h = 150;
-        var img = new File(Folder.temp + '/curve_preview.png');
+        var tempPath = Folder.temp.fsName;
+        var img = new File(tempPath + '/curve_preview.png');
         // 在实际生产环境中，这里应该生成真实的预览图像
         return img;
     }
