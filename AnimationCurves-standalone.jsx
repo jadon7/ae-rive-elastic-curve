@@ -433,6 +433,9 @@
                 code += '\nlinear(val, 0, 1, value.at(inPoint), value.at(outPoint));';
                 return code;
             }
+            
+            // 默认返回线性插值
+            return 'linear(time, inPoint, outPoint, value.at(inPoint), value.at(outPoint));';
         };
 
         /**
@@ -974,6 +977,12 @@
             factorGroup.visible = (type === 'accelerate' || type === 'decelerate');
             tensionGroup.visible = (type === 'anticipate' || type === 'overshoot' || type === 'anticipateOvershoot');
         };
+        
+        // 初始化参数显示状态
+        var initialType = curveMap[curveDropdown.selection.index];
+        viewModel.setCurveType(initialType);
+        factorGroup.visible = (initialType === 'accelerate' || initialType === 'decelerate');
+        tensionGroup.visible = (initialType === 'anticipate' || initialType === 'overshoot' || initialType === 'anticipateOvershoot');
 
         factorSlider.onChanging = function() {
             factorText.text = factorSlider.value.toFixed(1);
@@ -1047,6 +1056,11 @@
             viewModel.setCurveType(type);
             paramPanel.visible = (type === 'springCustom');
         };
+        
+        // 初始化参数显示状态
+        var initialType = curveMap[curveDropdown.selection.index];
+        viewModel.setCurveType(initialType);
+        paramPanel.visible = (initialType === 'springCustom');
 
         dampSlider.onChanging = function() {
             dampText.text = dampSlider.value.toFixed(2);
