@@ -841,12 +841,15 @@
         setupAndroidTab(androidTab, viewModel);
         setupIOSTab(iosTab, viewModel);
 
-        // 预览区域
+        // 预览区域（占位符）
         var previewGroup = win.add('group');
         previewGroup.orientation = 'column';
         previewGroup.alignChildren = ['center', 'top'];
-        previewGroup.add('statictext', undefined, 'Preview:');
-        var canvas = previewGroup.add('image', undefined, createPreviewImage(viewModel));
+        var previewLabel = previewGroup.add('statictext', undefined, 'Curve Preview');
+        previewLabel.preferredSize = [280, 20];
+        var previewInfo = previewGroup.add('statictext', undefined, 'Select curve and adjust parameters above', {multiline: true});
+        previewInfo.preferredSize = [280, 130];
+        previewInfo.graphics.backgroundColor = previewInfo.graphics.newBrush(previewInfo.graphics.BrushType.SOLID_COLOR, [0.2, 0.2, 0.2, 1]);
 
         // 应用按钮
         var applyBtn = win.add('button', undefined, 'Apply to Selected Keyframes');
@@ -856,15 +859,11 @@
         tabPanel.onChange = function() {
             var platform = ['rive', 'android', 'ios'][tabPanel.selection.index];
             viewModel.setPlatform(platform);
-            canvas.image = createPreviewImage(viewModel);
+            previewInfo.text = 'Platform: ' + platform.toUpperCase() + '\nCurve: ' + viewModel.curveType;
         };
 
         applyBtn.onClick = function() {
             applyToKeyframes(viewModel);
-        };
-
-        win.onShow = function() {
-            canvas.image = createPreviewImage(viewModel);
         };
 
         return win;
@@ -1064,18 +1063,6 @@
             durText.text = durSlider.value.toFixed(1);
             viewModel.setParam('duration', durSlider.value);
         };
-    }
-
-    /**
-     * 创建预览图像
-     * 注意: AE 不支持直接绘制 canvas，这里返回占位符
-     */
-    function createPreviewImage(viewModel) {
-        var w = 280, h = 150;
-        var tempPath = Folder.temp.fsName;
-        var img = new File(tempPath + '/curve_preview.png');
-        // 在实际生产环境中，这里应该生成真实的预览图像
-        return img;
     }
 
     /**
