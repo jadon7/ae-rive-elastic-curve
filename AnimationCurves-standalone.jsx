@@ -849,7 +849,6 @@
         previewLabel.preferredSize = [280, 20];
         var previewInfo = previewGroup.add('statictext', undefined, 'Select curve and adjust parameters above', {multiline: true});
         previewInfo.preferredSize = [280, 130];
-        previewInfo.graphics.backgroundColor = previewInfo.graphics.newBrush(previewInfo.graphics.BrushType.SOLID_COLOR, [0.2, 0.2, 0.2, 1]);
 
         // 应用按钮
         var applyBtn = win.add('button', undefined, 'Apply to Selected Keyframes');
