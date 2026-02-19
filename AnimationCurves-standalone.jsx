@@ -430,12 +430,12 @@
                     code += '}\n';
                 }
 
-                code += '\nlinear(val, 0, 1, value.at(inPoint), value.at(outPoint));';
+                code += '\nlinear(val, 0, 1, valueAtTime(inPoint), valueAtTime(outPoint));';
                 return code;
             }
-            
+
             // 默认返回线性插值
-            return 'linear(time, inPoint, outPoint, value.at(inPoint), value.at(outPoint));';
+            return 'linear(time, inPoint, outPoint, valueAtTime(inPoint), valueAtTime(outPoint));';
         };
 
         /**
@@ -529,7 +529,7 @@
                     break;
             }
 
-            code += '\nlinear(val, 0, 1, value.at(inPoint), value.at(outPoint));';
+            code += '\nlinear(val, 0, 1, valueAtTime(inPoint), valueAtTime(outPoint));';
             return code;
         };
 
@@ -603,7 +603,7 @@
                     break;
             }
 
-            code += '\nlinear(val, 0, 1, value.at(inPoint), value.at(outPoint));';
+            code += '\nlinear(val, 0, 1, valueAtTime(inPoint), valueAtTime(outPoint));';
             return code;
         };
 
@@ -955,7 +955,6 @@
         var factorSlider = factorGroup.add('slider', undefined, 1.0, 0.1, 3.0);
         var factorText = factorGroup.add('edittext', undefined, '1.0');
         factorText.characters = 5;
-        factorGroup.visible = true;  // 默认可见
 
         // Tension 参数
         var tensionGroup = paramPanel.add('group');
@@ -963,7 +962,6 @@
         var tensionSlider = tensionGroup.add('slider', undefined, 2.0, 0.0, 5.0);
         var tensionText = tensionGroup.add('edittext', undefined, '2.0');
         tensionText.characters = 5;
-        tensionGroup.visible = false;  // 默认隐藏
 
         // 曲线类型映射
         var curveMap = [
