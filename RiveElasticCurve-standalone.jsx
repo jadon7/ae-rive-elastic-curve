@@ -1,10 +1,10 @@
 // RiveElasticCurve-standalone.jsx
 // 单文件版本：所有依赖已合并，无需外部文件
-// 版本: 1.1.0 - 添加曲线可视化预览，改为 palette 窗口
+// 版本: 1.0.5 - 修复 nearestKey 关键帧区间计算
 
 /**
  * Rive 弹性曲线插件 - 单文件版本
- * 版本: 1.1.0
+ * 版本: 1.0.5
  * 作者: Personal
  * 描述: 将 Rive 弹性曲线应用到 After Effects 关键帧
  * 
@@ -15,8 +15,8 @@
  * 4. 调整参数后点击"应用到选中关键帧"
  * 
  * 更新日志：
- * v1.1.0 - 添加实时曲线预览，改为 palette 窗口（可停靠，不阻塞操作）
- * v1.0.6 - 修复窗口位置问题
+ * v1.0.5 - 修复表达式关键帧区间计算，使用 nearestKey 定位区间
+ * v1.0.4 - 修复 UI 窗口显示问题（dialog 窗口）
  */
 
 // ============================================================
@@ -236,21 +236,33 @@ function ExpressionGenerator() {
         
         // 应用到关键帧
         expression += '// 应用到关键帧\n';
-        expression += 'if (numKeys > 0) {\n';
-        expression += '    var key1 = nearestKey(time);\n';
-        expression += '    var keyIndex = key1.index;\n';
+        expression += 'if (numKeys > 1) {\n';
+        expression += '    var startKey = nearestKey(time);\n';
         expression += '    \n';
-        expression += '    if (time < key1.time) {\n';
-        expression += '        keyIndex--;\n';
+        expression += '    if (startKey.time > time) {\n';
+        expression += '        if (startKey.index > 1) {\n';
+        expression += '            startKey = key(startKey.index - 1);\n';
+        expression += '        } else {\n';
+        expression += '            startKey = null;\n';
+        expression += '        }\n';
         expression += '    }\n';
         expression += '    \n';
-        expression += '    if (keyIndex > 0 && keyIndex < numKeys) {\n';
-        expression += '        var t1 = key(keyIndex).time;\n';
-        expression += '        var t2 = key(keyIndex + 1).time;\n';
-        expression += '        var v1 = key(keyIndex);\n';
-        expression += '        var v2 = key(keyIndex + 1);\n';
+        expression += '    if (startKey !== null) {\n';
+        expression += '        var endKey = nearestKey(time + thisComp.frameDuration);\n';
         expression += '        \n';
-        expression += '        if (time >= t1 && time <= t2) {\n';
+        expression += '        if (endKey.time <= time) {\n';
+        expression += '            if (endKey.index < numKeys) {\n';
+        expression += '                endKey = key(endKey.index + 1);\n';
+        expression += '            } else {\n';
+        expression += '                endKey = null;\n';
+        expression += '            }\n';
+        expression += '        }\n';
+        expression += '        \n';
+        expression += '        if (endKey !== null && endKey.index > startKey.index) {\n';
+        expression += '            var t1 = startKey.time;\n';
+        expression += '            var t2 = endKey.time;\n';
+        expression += '            var v1 = startKey.value;\n';
+        expression += '            var v2 = endKey.value;\n';
         expression += '            var duration = t2 - t1;\n';
         expression += '            var progress = (time - t1) / duration;\n';
         expression += '            var factor = elasticEase(progress);\n';

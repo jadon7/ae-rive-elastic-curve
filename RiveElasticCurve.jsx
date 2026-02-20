@@ -1,10 +1,10 @@
 // RiveElasticCurve.jsx
 // 主入口：组装 MVVM 架构并启动插件
-// 版本: 1.0.2 - 修复 IIFE 作用域导致的构造函数访问问题
+// 版本: 1.0.5 - 修复 nearestKey 关键帧区间计算
 
 /**
  * Rive 弹性曲线插件
- * 版本: 1.0.2
+ * 版本: 1.0.5
  * 作者: Personal
  * 描述: 将 Rive 弹性曲线应用到 After Effects 关键帧
  */
