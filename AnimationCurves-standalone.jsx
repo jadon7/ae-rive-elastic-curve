@@ -407,7 +407,8 @@
          */
         this.generateRive = function(type, params) {
             if (type === 'elastic') {
-                var code = '';
+                var code = '// RIVE Elastic - ' + params.easingType + '\n';
+                code += '// Amplitude: ' + params.amplitude + ', Period: ' + params.period + '\n\n';
                 code += 'var amp = ' + params.amplitude + ';\n';
                 code += 'var per = ' + params.period + ';\n';
                 code += 'var t = (time - inPoint) / (outPoint - inPoint);\n';
@@ -430,7 +431,9 @@
                     code += '}\n';
                 }
 
-                code += '\nlinear(val, 0, 1, valueAtTime(inPoint), valueAtTime(outPoint));';
+                code += '\nvar startVal = valueAtTime(inPoint);\n';
+                code += 'var endVal = valueAtTime(outPoint);\n';
+                code += 'linear(val, 0, 1, startVal, endVal);';
                 return code;
             }
 
@@ -982,9 +985,11 @@
             factorGroup.visible = showFactor;
             tensionGroup.visible = showTension;
 
-            // 强制刷新布局 - 从面板到标签页
+            // 强制刷新布局 - 多层级刷新确保 UI 更新
             paramPanel.layout.layout(true);
+            paramPanel.layout.resize();
             tab.layout.layout(true);
+            tab.layout.resize();
         };
 
         // 初始化参数显示状态
@@ -1069,11 +1074,13 @@
                                 type === 'springBouncy' || type === 'springCustom');
             paramPanel.visible = isSpringCurve;
 
-            // 强制刷新布局 - 从面板到标签页
+            // 强制刷新布局 - 多层级刷新确保 UI 更新
             if (isSpringCurve) {
                 paramPanel.layout.layout(true);
+                paramPanel.layout.resize();
             }
             tab.layout.layout(true);
+            tab.layout.resize();
         };
 
         // 初始化参数显示状态
